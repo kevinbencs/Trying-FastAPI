@@ -11,9 +11,9 @@ app.include_router(blog.router)
 #    price: float
 #    is_offer: bool | None = None
 #
-#@app.get('/')
-#def read_root():
-#	return {"Hello": "World"}
+@app.get('/')
+def read_root():
+	return {"Hello": "World"}
 #
 #@app.get('/item/{item_id}')
 #def read_item(item_id: int, q: str | None = None):
