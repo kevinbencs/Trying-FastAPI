@@ -1,16 +1,17 @@
-from fastapi import FastAPI
+from typing import Annotated
+from fastapi import FastAPI, Form
 from pydantic import BaseModel
-from .routers import blog
+from .routers import blog, book
 
 app = FastAPI()
 
 app.include_router(blog.router)
 
-#class Item(BaseModel):
-#    name: str
-#    price: float
-#    is_offer: bool | None = None
-#
+class Item(BaseModel):
+    name: str
+    price: float
+    is_offer: bool | None = None
+
 @app.get('/')
 def read_root():
 	return {"Hello": "World"}
@@ -29,3 +30,11 @@ def read_root():
 #@app.put("/items/{item_id}")
 #def update_item(item_id: int, item: Item):
 #    return {"item_name": item.name, "item_id": item_id}
+
+@app.post("/register/")
+async def login(username: Annotated[str, Form()], password: Annotated[str, Form()], status_code=201):
+    return {"message": "Success"}
+
+@app.post("/login/")
+async def login(username: Annotated[str, Form()], password: Annotated[str, Form()], status_code=200):
+    return {"username": username}
