@@ -1,5 +1,5 @@
 from typing import Annotated
-from fastapi import FastAPI, Form
+from fastapi import FastAPI, Form, HTTPException, Cookie, Response
 from pydantic import BaseModel
 from .routers import blog, book
 
@@ -11,6 +11,12 @@ class Item(BaseModel):
     name: str
     price: float
     is_offer: bool | None = None
+
+class Cookies(BaseModel):
+    session_id: str
+    name: str | None = None
+    token: str | None = None
+
 
 @app.get('/')
 def read_root():
@@ -35,6 +41,7 @@ def read_root():
 async def login(username: Annotated[str, Form()], password: Annotated[str, Form()], status_code=201):
     return {"message": "Success"}
 
-@app.post("/login/")
-async def login(username: Annotated[str, Form()], password: Annotated[str, Form()], status_code=200):
-    return {"username": username}
+@app.post("/cookie-and-object/")
+def create_cookie(response: Response, status_code=201):
+    response.set_cookie(key="fakesession", value="fake-cookie-session-value")
+    return {"message": "Come to the dark side, we have cookies"}

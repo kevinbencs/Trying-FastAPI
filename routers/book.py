@@ -12,6 +12,6 @@ def read():
 
 @router.post("/",status_code=status.HTTP_201_CREATED)
 def new_item(item: str):
-    if item == "":
+    if item == "fff":
         return HTTPException(status_code=status.HTTP_200_OK, detail=f'{item} is exist')
     return {"Item": item}
