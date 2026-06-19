@@ -1,4 +1,4 @@
-from fastap import FastAPI
+from fastapi import FastAPI
 from app.db import create_db_and_tables
 from contextlib import asynccontextmanager
 
