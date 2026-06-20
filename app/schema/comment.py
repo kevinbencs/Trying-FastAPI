@@ -1,4 +1,4 @@
 from pydantic import BaseModel
 
-class Comment(BaseModel):
+class CommentSchema(BaseModel):
     text: str
