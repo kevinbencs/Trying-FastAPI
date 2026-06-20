@@ -3,3 +3,4 @@ bcrypt
 passlib
 python-jose
 python-multipart
+pyjwt
