@@ -1,5 +1,4 @@
 fastapi
-uvicorn
 bcrypt
 passlib
 python-jose
