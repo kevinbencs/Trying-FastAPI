@@ -18,3 +18,11 @@ async def get_drink_by_name(session: SessionDep, name: str):
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUND, detail= "Drink not found")
 
     return {"drinks": drinks}
+
+async def get_drink_by_category(session: SessionDep, category: str):
+    drinks = session.exec(select(Drink).where(Drink.category == category))
+
+    if not drinks:
+        raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Drink not found")
+
+    return {"drinks": drinks}
