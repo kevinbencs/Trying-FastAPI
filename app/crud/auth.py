@@ -1,6 +1,6 @@
 from app.schema.auth import RegisterSchema, LogInSchema
 from app.config import get_settings
-from app.db import get_session
+from app.db import  SessionDep
 from app.model.user import User
 from typing import Annotated
 from fastapi import HTTPException, status, Depends, Response
@@ -14,7 +14,6 @@ ALGORITHM = settings.jwt_algorithm
 EXPIRE = settings.jwt_expire_minutes
 
 
-SessionDep = Annotated[Session, Depends(get_session)]
 
 async def SignUp(user: RegisterSchema, session: SessionDep):
     found_user = session.exec(select(User).where(User.email == user.email)).first()
