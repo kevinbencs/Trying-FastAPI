@@ -1,4 +1,6 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, EmailStr
 
 class CommentSchema(BaseModel):
-    text: str
+    text: str | None = None
+    email: EmailStr| None = None
+    drink_id: str | None = None
