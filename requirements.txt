@@ -1,4 +1,8 @@
 fastapi
+uvicorn[standard]
+sqlmodel
+psycopg2-binary
+pydantic-settings
 bcrypt
 passlib
 python-jose
