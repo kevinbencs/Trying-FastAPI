@@ -3,7 +3,9 @@ from app.model.drink import Drink
 
 from app.db import SessionDep
 
-async def get_drink_by_id(session: SessionDep, item_id: str):
+session: SessionDep
+
+async def get_drink_by_id( item_id: str):
     drink = session.get(Drink, item_id)
 
     if not drink:
@@ -11,7 +13,7 @@ async def get_drink_by_id(session: SessionDep, item_id: str):
 
     return {"drink": drink}
 
-async def get_drink_by_name(session: SessionDep, name: str):
+async def get_drink_by_name( name: str):
     drinks = session.exec(select(Drink).where(Drink.name == name))
 
     if not drinks:
@@ -19,7 +21,7 @@ async def get_drink_by_name(session: SessionDep, name: str):
 
     return {"drinks": drinks}
 
-async def get_drink_by_category(session: SessionDep, category: str):
+async def get_drink_by_category( category: str):
     drinks = session.exec(select(Drink).where(Drink.category == category))
 
     if not drinks:

@@ -4,7 +4,9 @@ from app.db import SessionDep
 from app.model.user import User
 from app.schema.comment import CommentSchema
 
-async def get_comment(session: SessionDep, drink_id: str):
+session: SessionDep
+
+async def get_comment( drink_id: str):
     comments = session.exec(select(Comment).where(Comment.drink_id == drink_id))
 
     if not comments:
@@ -12,7 +14,7 @@ async def get_comment(session: SessionDep, drink_id: str):
 
     return {"comments": comments}
 
-async def add_comment(session: SessionDep, drink_id: str, user: User, text: str):
+async def add_comment(drink_id: str, user: User, text: str):
     if not text:
         raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail = "Text is required.")
     db_comment = Comment(text = text, email = user.email, drink_id = drink_id)
@@ -22,7 +24,7 @@ async def add_comment(session: SessionDep, drink_id: str, user: User, text: str)
 
     return {"message": "success"}
 
-async def update_comment(session: SessionDep, comment_id: str, comment: CommentSchema):
+async def update_comment(comment_id: str, comment: CommentSchema):
     if not comment:
         raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST, detail= "Text is required ")
 
@@ -40,7 +42,7 @@ async def update_comment(session: SessionDep, comment_id: str, comment: CommentS
     return {"message": "success"}
 
 
-async def delete_comment(session: SessionDep, id: str):
+async def delete_comment( id: str):
     comment = session.get(Comment, id)
 
     if not comment:

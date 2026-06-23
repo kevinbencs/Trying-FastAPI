@@ -13,9 +13,9 @@ SECRET = settings.jwt_secret
 ALGORITHM = settings.jwt_algorithm
 EXPIRE = settings.jwt_expire_minutes
 
+session: SessionDep
 
-
-async def SignUp(user: RegisterSchema, session: SessionDep):
+async def SignUp(user: RegisterSchema):
     found_user = session.exec(select(User).where(User.email == user.email)).first()
 
     if found_user:
@@ -30,7 +30,7 @@ async def SignUp(user: RegisterSchema, session: SessionDep):
     return {'message': 'success'}
 
 
-async def SignIn(user: LogInSchema, session: SessionDep, response: Response):
+async def SignIn(user: LogInSchema, response: Response):
     found_user = session.exec(select(User).where(user.email == User.email)).first()
 
     if not found_user or bcrypt.checkpw(user.password.encode(), found_user.password.encode()):
