@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Response, status, Cookie, Response
+from fastapi import APIRouter, Response, status, Cookie
 from app.schema.auth import RegisterSchema, LogInSchema
 from app.crud.auth import SignUp, SignIn, log_out
 
