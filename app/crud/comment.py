@@ -36,3 +36,15 @@ async def update_comment(session: SessionDep, comment_id: str, comment: CommentS
     session.refresh(db_comment)
 
     return {"message": "success"}
+
+
+async def delete_comment(session: SessionDep, id: str):
+    comment = session.get(Comment, id)
+
+    if not comment:
+        raise HTTPException(status_code= status.HTTP_404_NOT_FOUD, detail = "Comment not found")
+
+    session.delete(comment)
+    session.commit()
+
+    return {"message": "success"}
