@@ -24,7 +24,7 @@ async def add_comment(drink_id: str, user: User, text: str):
 
     return {"message": "success"}
 
-async def update_comment(comment_id: str, comment: CommentSchema):
+async def update_comment(comment_id: str, comment: CommentSchema, user: User):
     if not comment:
         raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST, detail= "Text is required ")
 
@@ -32,6 +32,9 @@ async def update_comment(comment_id: str, comment: CommentSchema):
 
     if not db_comment:
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail= "Comment not found")
+
+    if comment.email != user.email:
+        raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail = "Forbidden")
 
     comment_data = comment.model_dump(exclude_unset = True)
     db_comment.sqlmodel_update(comment_data)
@@ -42,11 +45,14 @@ async def update_comment(comment_id: str, comment: CommentSchema):
     return {"message": "success"}
 
 
-async def delete_comment( id: str):
+async def delete_comment( id: str, user: User):
     comment = session.get(Comment, id)
 
     if not comment:
         raise HTTPException(status_code= status.HTTP_404_NOT_FOUD, detail = "Comment not found")
+
+    if comment.email != user.email:
+        raise HTTPException(status_code = status.HTTP_403_FORBIDDEN, detail = "Forbidden")
 
     session.delete(comment)
     session.commit()
