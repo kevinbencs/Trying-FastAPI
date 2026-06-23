@@ -15,13 +15,15 @@ async def get_comment(session: SessionDep, drink_id: str):
 async def add_comment(session: SessionDep, drink_id: str, user: User, text: str):
     if not text:
         raise HTTPException(status_code= status.HTTP_400_BAD_REQUEST, detail = "Text is required.")
-    session.commit
+    db_comment = Comment(text = text, email = user.email, drink_id = drink_id)
+    session.add(db_comment)
+    session.commit()
     session.refresh(db_comment)
 
     return {"message": "success"}
 
 async def update_comment(session: SessionDep, comment_id: str, comment: CommentSchema):
-    if not text:
+    if not comment:
         raise HTTPException(status_code = status.HTTP_400_BAD_REQUEST, detail= "Text is required ")
 
     db_comment = session.get(Comment, comment_id)
