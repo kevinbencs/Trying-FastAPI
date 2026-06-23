@@ -9,3 +9,4 @@ async def get_comment(session: SessionDep, drink_id: str):
         raise HTTPException(status_code = status.HTTP_404_NOT_FOUND, detail = "Comment not found")
 
     return {"comments": comments}
+

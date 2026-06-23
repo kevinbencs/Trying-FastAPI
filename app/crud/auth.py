@@ -3,7 +3,7 @@ from app.config import get_settings
 from app.db import get_session
 from app.model.user import User
 from typing import Annotated
-from fastapi import HTTPException, status, Depends
+from fastapi import HTTPException, status, Depends, Response
 import bcrypt
 import jwt
 
@@ -16,7 +16,7 @@ EXPIRE = settings.jwt_expire_minutes
 
 SessionDep = Annotated[Session, Depends(get_session)]
 
-def SignUp(user: RegisterSchema, session: SessionDep):
+async def SignUp(user: RegisterSchema, session: SessionDep):
     found_user = session.exec(select(User).where(User.email == user.email)).first()
 
     if found_user:
@@ -31,13 +31,19 @@ def SignUp(user: RegisterSchema, session: SessionDep):
     return {'message': 'success'}
 
 
-def SignIn(user: LogInSchema, session: SessionDep, response: Response):
+async def SignIn(user: LogInSchema, session: SessionDep, response: Response):
     found_user = session.exec(select(User).where(user.email == User.email)).first()
 
     if not found_user or bcrypt.checkpw(user.password.encode(), found_user.password.encode()):
         raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED,detail='Invalid email or password')
-    
+
     expire = datetime.utcnow() + timedelta(minutes=EXPIRE)
     token = jwt.encode({"user_id": found_user.id, 'exp': expire}, SECRET, algorithms = ALGORITHM)
     response.set_cookie(key='authsession', value=token, secure = True, httponly = True, expires=EXPIRE)
+    return {"message": "success"}
+
+
+async def log_out(response: Response):
+    response.delete_cookie('authsession')
+
     return {"message": "success"}
